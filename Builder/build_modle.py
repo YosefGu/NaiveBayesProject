@@ -4,7 +4,10 @@ class BuildModel():
 
     def __init__(self):
         self.class_probs = {}  # P(y)
-        self.feature_probs = defaultdict(lambda: defaultdict(dict))  # P(x_i | y)
+        self.feature_probs = defaultdict(self._default_nested_dict)  # P(x_i | y)
+    
+    def _default_nested_dict(self):
+        return defaultdict(dict)
     
     def fit(self, df):
         # הסרת עמודת id כי היא לא תכונה שימושית
@@ -27,6 +30,7 @@ class BuildModel():
                 for label in label_counts.index:
                     count_label = label_counts[label]
                     count_value_label = len(df[(df[feature] == value) & (df[label_col] == label)])
-                    # smoothing:
                     self.feature_probs[feature][value][label] = (count_value_label + 1) / (count_label + len(values))
+
+        return self  
 
