@@ -4,28 +4,26 @@ from Builder.build_modle import BuildModel
 from Classifier.classifier import Classifier
 from Validation.test_model import TestModel
 
-def run():
-    df = DataLoader.load_data("Data/labeled_data.csv")
-    shuffled_df = CleanAndSplit.shuffl_df(df)
-    train_df, test_df = CleanAndSplit.split_df(shuffled_df)
+class Manager():
 
-    model = BuildModel()
-    model.fit(train_df)
+    def __init__(self):
+        self.model = None
+        self.model_score = None
+        self.classifier = None
+        self.run()
+        
 
-    print(TestModel.evaluate(test_df, model))
+    def run(self):
+        df = DataLoader.load_data("Data/labeled_data.csv")
+        shuffled_df = CleanAndSplit.shuffl_df(df)
+        train_df, test_df = CleanAndSplit.split_df(shuffled_df)
 
-    predictor = Classifier(model)
+        self.model = BuildModel().fit(train_df)
+        self.model_score = TestModel.evaluate(test_df, self.model)
+        self.classifier = Classifier(self.model)
 
-    sample = {
-        "Browser": "Chrome",
-        "Device_Type": "Desktop",
-        "Is_Student": "Yes",
-        "Visited_Site": "Yes",
-        "Usage_Frequency": "Low",
-        "Income_Level": "Medium"
-        }
+    def predict(self, features):
+        return self.classifier.predict(features)
 
-    print(predictor.predict(sample))
 
-if __name__ == "__main__":
-    run()
+
