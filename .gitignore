@@ -1,1 +1,8 @@
 /venv
+/Builder/__pycache__
+/Cleaning/__pycache__
+/Predictor/__pycache__
+/Validation/__pycache__
+/Data_Loader/__pycache__
+/Classifier/__pycache__
+/Data
