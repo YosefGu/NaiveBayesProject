@@ -5,21 +5,20 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# התקנת תלות בסיסית
-RUN apt-get update && apt-get install -y build-essential
-
 # צור תקייה לפרויקט
 WORKDIR /app
 
-# העתק את כל הקבצים מהפרויקט
-COPY . /app
+# העתקת קובץ תלויות
+COPY requirements.txt .
 
 # התקנת תלויות
-RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
+# העתק את כל הקבצים מהפרויקט
+COPY . .
 
 # חשיפת פורט
 EXPOSE 8000
 
 # הפעלת שרת uvicorn
-CMD ["uvicorn", "Api.main:app", "--host", "0.0.0.0", "--port", "8765"]
+CMD ["uvicorn", "Api.main:app", "--host", "0.0.0.0", "--port", "8000"]

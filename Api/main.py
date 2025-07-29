@@ -14,10 +14,12 @@ class InputData(BaseModel):
     Usage_Frequency: str
     Income_Level: str
 
+# Root
 @app.get("/")
 def root():
     return {"status": "Server is running!"}
 
+# Predict
 @app.post("/predict")
 def predict(data: InputData):
     sample = {
