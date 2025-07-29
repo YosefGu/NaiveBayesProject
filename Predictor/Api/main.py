@@ -1,8 +1,8 @@
-import pickle
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 from Classifier.classifier import Classifier
+from Validation.test_model import TestModel
 from manager import Manager
 
 app = FastAPI()
@@ -28,17 +28,15 @@ def root():
 
 @app.post("/predict")
 def predict(sample: InputData):
-    with open("model.pkl", "rb") as f:
-        model = pickle.load(f)
-    prediction = Classifier.predict(model, sample)
-    return {"prediction": prediction}
+    try: 
+        prediction = Classifier.predict(manager.model, sample)
+        return {"prediction": prediction}
+    except Exception as e:
+        return {"error": f"Model could not be loaded: {str(e)}"}
 
 
-# @app.get("/test-model")
-# def test_model():
-#     model= Utils.get_model()
-#     test_df = Utils.get_test_df()
-#     # return {"model": model, "df" : test_df}
-#     return TestModel.evaluate(model, test_df)
+@app.get("/test-model")
+def test_model():
+    return TestModel.evaluate(manager.model, manager.test_df)
 
 
