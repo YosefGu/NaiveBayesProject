@@ -32,5 +32,5 @@ class BuildModel():
                     count_value_label = len(df[(df[feature] == value) & (df[label_col] == label)])
                     self.feature_probs[feature][value][label] = (count_value_label + 1) / (count_label + len(values))
 
-        return self  
+        return [self.class_probs, self.feature_probs] 
 
